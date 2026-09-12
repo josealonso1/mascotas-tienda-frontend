@@ -17,5 +17,16 @@
     "testimonialsManager": "Testimonials Management",
     "contactRequestsManager": "Contact Requests Management",
     "notFound": "Page Not Found"
+  },
+  "home": {
+    "heroTitle": "Handmade pet portraits with love",
+    "heroSubtitle": "We transform your pet photos into unique works of art that will last forever",
+    "highlightsTitle": "Our work",
+    "testimonialsTitle": "How our clients feel when they receive their portrait",
+    "socialTitle": "Be part of the creative process, live",
+    "watchOnTikTok": "Watch on TikTok",
+    "watchOnTwitch": "Watch on Twitch",
+    "loading": "Loading...",
+    "error": "Error loading data"
   }
 }

@@ -17,5 +17,16 @@
     "testimonialsManager": "Gestión de Testimonials",
     "contactRequestsManager": "Gestión de Solicitudes de Contacto",
     "notFound": "Página no encontrada"
+  },
+  "home": {
+    "heroTitle": "Cuadros de mascotas hechos a mano con amor",
+    "heroSubtitle": "Transformamos las fotos de tu mascota en obras de arte únicas que durarán para siempre",
+    "highlightsTitle": "Nuestros trabajos",
+    "testimonialsTitle": "Lo que nuestros clientes sienten al recibir su retrato",
+    "socialTitle": "Sé parte del proceso creativo, en directo",
+    "watchOnTikTok": "Ver en TikTok",
+    "watchOnTwitch": "Ver en Twitch",
+    "loading": "Cargando...",
+    "error": "Error al cargar los datos"
   }
 }
