@@ -1,19 +1,30 @@
 import { Link } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-const Navbar = () => (
-  <nav>
-    <Link to="/">Home</Link>
-    <Link to="/galeria">Galería</Link>
-    <a href="#contacto">Contacto</a>
-  </nav>
-);
+const Navbar = () => {
+  const { t, i18n } = useTranslation();
 
-const Footer = () => (
-  <footer>
-    <p>© 2026 Mascotas Tienda - Arte de Mascotas</p>
-  </footer>
-);
+  return (
+    <nav>
+      <Link to="/">{t('nav.home')}</Link>
+      <Link to="/galeria">{t('nav.gallery')}</Link>
+      <a href="#contacto">{t('nav.contact')}</a>
+      <button onClick={() => i18n.changeLanguage('es')}>ES</button>
+      <button onClick={() => i18n.changeLanguage('en')}>EN</button>
+    </nav>
+  );
+};
+
+const Footer = () => {
+  const { t } = useTranslation();
+
+  return (
+    <footer>
+      <p>{t('footer.copyright')}</p>
+    </footer>
+  );
+};
 
 const PublicLayout = () => {
   return (

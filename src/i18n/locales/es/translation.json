@@ -1,0 +1,21 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "gallery": "Galería",
+    "contact": "Contacto"
+  },
+  "footer": {
+    "copyright": "© 2026 Mascotas Tienda - Arte de Mascotas"
+  },
+  "pages": {
+    "home": "Inicio",
+    "gallery": "Galería",
+    "adminLogin": "Login Admin",
+    "homeContactTitle": "Contáctanos",
+    "dashboard": "Dashboard",
+    "artworksManager": "Gestión de Artworks",
+    "testimonialsManager": "Gestión de Testimonials",
+    "contactRequestsManager": "Gestión de Solicitudes de Contacto",
+    "notFound": "Página no encontrada"
+  }
+}

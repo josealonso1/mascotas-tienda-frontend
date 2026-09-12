@@ -1,0 +1,21 @@
+{
+  "nav": {
+    "home": "Home",
+    "gallery": "Gallery",
+    "contact": "Contact"
+  },
+  "footer": {
+    "copyright": "© 2026 Mascotas Tienda - Pet Art"
+  },
+  "pages": {
+    "home": "Home",
+    "gallery": "Gallery",
+    "adminLogin": "Admin Login",
+    "homeContactTitle": "Contact Us",
+    "dashboard": "Dashboard",
+    "artworksManager": "Artworks Management",
+    "testimonialsManager": "Testimonials Management",
+    "contactRequestsManager": "Contact Requests Management",
+    "notFound": "Page Not Found"
+  }
+}

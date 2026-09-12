@@ -1,5 +1,8 @@
+import { useTranslation } from 'react-i18next';
+
 const Gallery = () => {
-  return <h1>Galería</h1>;
+  const { t } = useTranslation();
+  return <h1>{t('pages.gallery')}</h1>;
 };
 
 export default Gallery;
