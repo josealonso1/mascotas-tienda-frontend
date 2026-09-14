@@ -28,5 +28,11 @@
     "watchOnTwitch": "Watch on Twitch",
     "loading": "Loading...",
     "error": "Error loading data"
+  },
+  "gallery": {
+    "loading": "Loading...",
+    "error": "Error loading data",
+    "testimonialsTitle": "Testimonials for this portrait",
+    "close": "Close"
   }
 }

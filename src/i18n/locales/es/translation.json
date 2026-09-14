@@ -28,5 +28,11 @@
     "watchOnTwitch": "Ver en Twitch",
     "loading": "Cargando...",
     "error": "Error al cargar los datos"
+  },
+  "gallery": {
+    "loading": "Cargando...",
+    "error": "Error al cargar los datos",
+    "testimonialsTitle": "Testimonios de este retrato",
+    "close": "Cerrar"
   }
 }
