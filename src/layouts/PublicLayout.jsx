@@ -9,7 +9,7 @@ const Navbar = () => {
     <nav>
       <Link to="/">{t('nav.home')}</Link>
       <Link to="/galeria">{t('nav.gallery')}</Link>
-      <a href="#contacto">{t('nav.contact')}</a>
+      <Link to="/contacto">{t('nav.contact')}</Link>
       <button onClick={() => i18n.changeLanguage('es')}>ES</button>
       <button onClick={() => i18n.changeLanguage('en')}>EN</button>
     </nav>

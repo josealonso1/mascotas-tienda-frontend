@@ -34,5 +34,27 @@
     "error": "Error al cargar los datos",
     "testimonialsTitle": "Testimonios de este retrato",
     "close": "Cerrar"
+  },
+  "contact": {
+    "title": "Contacto",
+    "clientNameLabel": "Nombre",
+    "clientNamePlaceholder": "Tu nombre completo",
+    "emailLabel": "Email",
+    "emailPlaceholder": "tu@email.com",
+    "whatsappLabel": "WhatsApp",
+    "whatsappPlaceholder": "+54 9 11 1234 5678",
+    "countryLabel": "País",
+    "countryPlaceholder": "Argentina",
+    "petNameLabel": "Nombre de tu mascota (opcional)",
+    "petNamePlaceholder": "Firulais",
+    "notesLabel": "Notas adicionales (opcional)",
+    "notesPlaceholder": "Cuéntanos más sobre tu mascota...",
+    "wantsPromotionsLabel": "Quiero recibir promociones y novedades",
+    "imageLabel": "Foto de tu mascota (opcional)",
+    "imagePlaceholder": "Seleccionar archivo...",
+    "submit": "Enviar",
+    "success": "¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.",
+    "error": "Error al enviar el mensaje. Por favor, intenta nuevamente.",
+    "sendAnother": "Enviar otra solicitud"
   }
 }

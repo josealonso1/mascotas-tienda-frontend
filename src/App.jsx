@@ -3,6 +3,7 @@ import PublicLayout from './layouts/PublicLayout';
 import AdminLayout from './layouts/AdminLayout';
 import Home from './pages/public/Home';
 import Gallery from './pages/public/Gallery';
+import Contact from './pages/public/Contact';
 import AdminLogin from './pages/admin/AdminLogin';
 import Dashboard from './pages/admin/Dashboard';
 import ArtworksManager from './pages/admin/ArtworksManager';
@@ -15,6 +16,7 @@ function App() {
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/galeria" element={<Gallery />} />
+        <Route path="/contacto" element={<Contact />} />
         <Route path="*" element={<h1>Página no encontrada</h1>} />
       </Route>
       <Route element={<AdminLayout />}>

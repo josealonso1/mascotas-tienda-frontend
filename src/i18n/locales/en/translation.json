@@ -34,5 +34,27 @@
     "error": "Error loading data",
     "testimonialsTitle": "Testimonials for this portrait",
     "close": "Close"
+  },
+  "contact": {
+    "title": "Contact",
+    "clientNameLabel": "Name",
+    "clientNamePlaceholder": "Your full name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "whatsappLabel": "WhatsApp",
+    "whatsappPlaceholder": "+1 234 567 8900",
+    "countryLabel": "Country",
+    "countryPlaceholder": "United States",
+    "petNameLabel": "Pet's name (optional)",
+    "petNamePlaceholder": "Fido",
+    "notesLabel": "Additional notes (optional)",
+    "notesPlaceholder": "Tell us more about your pet...",
+    "wantsPromotionsLabel": "I want to receive promotions and news",
+    "imageLabel": "Pet photo (optional)",
+    "imagePlaceholder": "Select file...",
+    "submit": "Send",
+    "success": "Message sent successfully! We'll get in touch with you soon.",
+    "error": "Error sending message. Please try again.",
+    "sendAnother": "Send another request"
   }
 }
