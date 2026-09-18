@@ -1,6 +1,6 @@
 import axiosClient from './axiosClient';
 
-export const login = async (email, password) => {
+export const login = async (username, password) => {
   const response = await axiosClient.post('/api/auth/login', { username, password });
   return response.data;
 };

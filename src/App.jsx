@@ -9,6 +9,7 @@ import Dashboard from './pages/admin/Dashboard';
 import ArtworksManager from './pages/admin/ArtworksManager';
 import TestimonialsManager from './pages/admin/TestimonialsManager';
 import ContactRequestsManager from './pages/admin/ContactRequestsManager';
+import ProtectedRoute from './routes/ProtectedRoute';
 
 function App() {
   return (
@@ -21,10 +22,12 @@ function App() {
       </Route>
       <Route element={<AdminLayout />}>
         <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin" element={<Dashboard />} />
-        <Route path="/admin/artworks" element={<ArtworksManager />} />
-        <Route path="/admin/testimonials" element={<TestimonialsManager />} />
-        <Route path="/admin/contact-requests" element={<ContactRequestsManager />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/admin" element={<Dashboard />} />
+          <Route path="/admin/artworks" element={<ArtworksManager />} />
+          <Route path="/admin/testimonials" element={<TestimonialsManager />} />
+          <Route path="/admin/contact-requests" element={<ContactRequestsManager />} />
+        </Route>
       </Route>
     </Routes>
   );

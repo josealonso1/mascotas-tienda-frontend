@@ -56,5 +56,8 @@
     "success": "¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.",
     "error": "Error al enviar el mensaje. Por favor, intenta nuevamente.",
     "sendAnother": "Enviar otra solicitud"
+  },
+  "admin": {
+    "verifyingSession": "Verificando sesión..."
   }
 }

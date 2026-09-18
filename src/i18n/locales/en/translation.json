@@ -56,5 +56,8 @@
     "success": "Message sent successfully! We'll get in touch with you soon.",
     "error": "Error sending message. Please try again.",
     "sendAnother": "Send another request"
+  },
+  "admin": {
+    "verifyingSession": "Verifying session..."
   }
 }
