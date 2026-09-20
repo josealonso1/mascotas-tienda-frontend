@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getTestimonials, createTestimonial, updateTestimonial, deleteTestimonial } from '../../api/testimonials';
 import { getArtworks } from '../../api/artworks';
+import { normalizeText } from '../../utils/text';
 
 const TestimonialsManager = () => {
   const [testimonials, setTestimonials] = useState([]);
@@ -16,6 +17,7 @@ const TestimonialsManager = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const fetchTestimonials = async () => {
     try {
@@ -152,6 +154,13 @@ const TestimonialsManager = () => {
     return <p className="text-center py-10 text-red-500">Error al cargar los testimonios</p>;
   }
 
+  const q = normalizeText(searchTerm);
+  const filteredTestimonials = testimonials.filter((testimonial) => {
+    const clientName = normalizeText(testimonial.client_name || '');
+    const content = normalizeText(testimonial.content || '');
+    return clientName.includes(q) || content.includes(q);
+  });
+
   return (
     <div className="max-w-6xl mx-auto py-8 px-4">
       <h1 className="text-3xl font-bold mb-8">Gestión de Testimonials</h1>
@@ -254,9 +263,21 @@ const TestimonialsManager = () => {
         </form>
       </div>
 
+      <div className="mb-4">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Buscar por cliente o contenido..."
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+
       <div className="bg-white rounded-lg shadow overflow-hidden">
         {testimonials.length === 0 ? (
           <p className="text-center py-10 text-gray-500">No hay testimonios todavía</p>
+        ) : filteredTestimonials.length === 0 ? (
+          <p className="text-center py-10 text-gray-500">No se encontraron resultados para la búsqueda</p>
         ) : (
           <table className="w-full">
             <thead className="bg-gray-50">
@@ -279,7 +300,7 @@ const TestimonialsManager = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {testimonials.map((testimonial) => (
+              {filteredTestimonials.map((testimonial) => (
                 <tr key={testimonial.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">{testimonial.client_name}</div>

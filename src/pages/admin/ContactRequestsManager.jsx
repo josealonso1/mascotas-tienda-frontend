@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import { getContactRequests, updateContactRequest, deleteContactRequest } from '../../api/contactRequests';
 import { getCountryName } from '../../utils/countries';
+import { normalizeText } from '../../utils/text';
 
 const ContactRequestsManager = () => {
   const [contactRequests, setContactRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedRequest, setSelectedRequest] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState('');
 
   const fetchContactRequests = async () => {
     try {
@@ -66,13 +69,65 @@ const ContactRequestsManager = () => {
     return <p className="text-center py-10 text-red-500">Error al cargar las solicitudes de contacto</p>;
   }
 
+  const countryOptions = contactRequests
+    .map((request) => request.country)
+    .filter(Boolean)
+    .filter((code, index, self) => self.indexOf(code) === index)
+    .map((code) => ({ code, name: getCountryName(code, 'es') }))
+    .sort((a, b) => a.name.localeCompare(b.name, 'es'));
+
+  const q = normalizeText(searchTerm);
+  const filteredRequests = contactRequests.filter((request) => {
+    const matchesText =
+      normalizeText(request.client_name || '').includes(q) ||
+      normalizeText(request.email || '').includes(q) ||
+      normalizeText(request.pet_name || '').includes(q);
+    const matchesCountry = selectedCountry === '' || request.country === selectedCountry;
+    return matchesText && matchesCountry;
+  });
+
   return (
     <div className="max-w-6xl mx-auto py-8 px-4">
       <h1 className="text-3xl font-bold mb-8">Gestión de Solicitudes de Contacto</h1>
 
+      <div className="flex flex-col md:flex-row gap-4 mb-4">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Buscar por nombre, email o mascota..."
+          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+        <select
+          value={selectedCountry}
+          onChange={(e) => setSelectedCountry(e.target.value)}
+          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        >
+          <option value="">Todos los países</option>
+          {countryOptions.map((option) => (
+            <option key={option.code} value={option.code}>
+              {option.name}
+            </option>
+          ))}
+        </select>
+        {(searchTerm !== '' || selectedCountry !== '') && (
+          <button
+            onClick={() => {
+              setSearchTerm('');
+              setSelectedCountry('');
+            }}
+            className="px-4 py-2 bg-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-400 transition"
+          >
+            Limpiar filtros
+          </button>
+        )}
+      </div>
+
       <div className="bg-white rounded-lg shadow overflow-hidden">
         {contactRequests.length === 0 ? (
           <p className="text-center py-10 text-gray-500">No hay solicitudes de contacto todavía</p>
+        ) : filteredRequests.length === 0 ? (
+          <p className="text-center py-10 text-gray-500">No se encontraron resultados para los filtros aplicados</p>
         ) : (
           <table className="w-full">
             <thead className="bg-gray-50">
@@ -87,6 +142,9 @@ const ContactRequestsManager = () => {
                   Mascota
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  País
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Estado
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -98,7 +156,7 @@ const ContactRequestsManager = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {contactRequests.map((request) => (
+              {filteredRequests.map((request) => (
                 <tr key={request.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">{request.client_name}</div>
@@ -108,6 +166,9 @@ const ContactRequestsManager = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-500">{request.pet_name || '-'}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-500">{getCountryName(request.country, 'es')}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <select
