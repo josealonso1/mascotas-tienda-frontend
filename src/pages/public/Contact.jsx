@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createContactRequest, uploadPetImage } from '../../api/contactRequests';
+import { getCountryOptions } from '../../utils/countries';
+import { sanitizeWhatsapp, isValidWhatsapp } from '../../utils/phone';
 
 const Contact = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [formData, setFormData] = useState({
     client_name: '',
     email: '',
@@ -18,10 +20,20 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState({
+    country: '',
+    whatsapp: '',
+  });
+
+  const countryOptions = useMemo(() => getCountryOptions(i18n.language), [i18n.language]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === 'whatsapp') {
+      setFormData((prev) => ({ ...prev, [name]: sanitizeWhatsapp(value) }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleCheckboxChange = (e) => {
@@ -39,6 +51,21 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitError(null);
+    setFieldErrors({ country: '', whatsapp: '' });
+
+    // Validar país
+    if (!formData.country) {
+      setFieldErrors((prev) => ({ ...prev, country: t('contact.countryRequiredError') }));
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Validar WhatsApp
+    if (!isValidWhatsapp(formData.whatsapp)) {
+      setFieldErrors((prev) => ({ ...prev, whatsapp: t('contact.whatsappInvalidError') }));
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       let imageUrl = null;
@@ -140,31 +167,46 @@ const Contact = () => {
             {t('contact.whatsappLabel')} *
           </label>
           <input
-            type="text"
+            type="tel"
             id="whatsapp"
             name="whatsapp"
             value={formData.whatsapp}
             onChange={handleChange}
-            placeholder={t('contact.whatsappPlaceholder')}
+            placeholder="+51987654321"
+            inputMode="tel"
+            autoComplete="tel"
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
+          {fieldErrors.whatsapp && (
+            <p className="mt-1 text-sm text-red-600">{fieldErrors.whatsapp}</p>
+          )}
         </div>
 
         <div>
           <label htmlFor="country" className="block text-sm font-medium mb-2">
             {t('contact.countryLabel')} *
           </label>
-          <input
-            type="text"
+          <select
             id="country"
             name="country"
             value={formData.country}
             onChange={handleChange}
-            placeholder={t('contact.countryPlaceholder')}
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
+          >
+            <option value="" disabled>
+              {t('contact.countrySelectPlaceholder')}
+            </option>
+            {countryOptions.map((option) => (
+              <option key={option.code} value={option.code}>
+                {option.name}
+              </option>
+            ))}
+          </select>
+          {fieldErrors.country && (
+            <p className="mt-1 text-sm text-red-600">{fieldErrors.country}</p>
+          )}
         </div>
 
         <div>

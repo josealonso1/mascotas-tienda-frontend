@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getContactRequests, updateContactRequest, deleteContactRequest } from '../../api/contactRequests';
+import { getCountryName } from '../../utils/countries';
 
 const ContactRequestsManager = () => {
   const [contactRequests, setContactRequests] = useState([]);
@@ -183,7 +184,7 @@ const ContactRequestsManager = () => {
 
                 <div>
                   <span className="font-semibold">País:</span>
-                  <p className="text-gray-700">{selectedRequest.country}</p>
+                  <p className="text-gray-700">{getCountryName(selectedRequest.country, 'es')}</p>
                 </div>
 
                 <div>

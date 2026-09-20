@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getArtworks, createArtwork, updateArtwork, deleteArtwork, uploadArtworkImage } from '../../api/artworks';
+import { normalizeText } from '../../utils/text';
 
 const ArtworksManager = () => {
   const [artworks, setArtworks] = useState([]);
@@ -13,6 +14,7 @@ const ArtworksManager = () => {
   const [artworkImageFile, setArtworkImageFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const fetchArtworks = async () => {
     try {
@@ -218,11 +220,32 @@ const ArtworksManager = () => {
         </form>
       </div>
 
+      <div className="mb-4">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Buscar por título..."
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+
       <div className="bg-white rounded-lg shadow overflow-hidden">
-        {artworks.length === 0 ? (
-          <p className="text-center py-10 text-gray-500">No hay artworks todavía</p>
-        ) : (
-          <table className="w-full">
+        {(() => {
+          const filteredArtworks = artworks.filter((a) =>
+            normalizeText(a.title).includes(normalizeText(searchTerm))
+          );
+
+          if (artworks.length === 0) {
+            return <p className="text-center py-10 text-gray-500">No hay artworks todavía</p>;
+          }
+
+          if (filteredArtworks.length === 0) {
+            return <p className="text-center py-10 text-gray-500">No se encontraron resultados para la búsqueda</p>;
+          }
+
+          return (
+            <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -240,7 +263,7 @@ const ArtworksManager = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {artworks.map((artwork) => (
+              {filteredArtworks.map((artwork) => (
                 <tr key={artwork.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <img
@@ -275,7 +298,8 @@ const ArtworksManager = () => {
               ))}
             </tbody>
           </table>
-        )}
+          );
+        })()}
       </div>
     </div>
   );
