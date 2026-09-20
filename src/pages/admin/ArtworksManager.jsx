@@ -230,7 +230,7 @@ const ArtworksManager = () => {
         />
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="bg-white rounded-lg shadow overflow-x-auto">
         {(() => {
           const filteredArtworks = artworks.filter((a) =>
             normalizeText(a.title).includes(normalizeText(searchTerm))

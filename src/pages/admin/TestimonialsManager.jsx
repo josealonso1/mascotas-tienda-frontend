@@ -273,7 +273,7 @@ const TestimonialsManager = () => {
         />
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="bg-white rounded-lg shadow overflow-x-auto">
         {testimonials.length === 0 ? (
           <p className="text-center py-10 text-gray-500">No hay testimonios todavía</p>
         ) : filteredTestimonials.length === 0 ? (
