@@ -3,9 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { createContactRequest, uploadPetImage } from '../../api/contactRequests';
 import { getCountryOptions } from '../../utils/countries';
 import { sanitizeWhatsapp, isValidWhatsapp } from '../../utils/phone';
+import { getImageError } from '../../utils/image';
 
 const labelClasses = 'block text-sm font-medium text-ink mb-2';
 const getInputClasses = (hasError = false) => 'w-full px-4 py-3 bg-white border rounded-xl text-ink placeholder:text-muted/60 focus:outline-none focus:ring-2 transition ' + (hasError ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : 'border-ink/20 focus:border-brand focus:ring-brand/30');
+
+const IMAGE_ERROR_KEYS = {
+  type: 'contact.imageTypeError',
+  size: 'contact.imageSizeError',
+  pixels: 'contact.imagePixelsError',
+};
 
 const Contact = () => {
   const { t, i18n } = useTranslation();
@@ -27,6 +34,7 @@ const Contact = () => {
     country: '',
     whatsapp: '',
   });
+  const [fileError, setFileError] = useState('');
 
   const countryOptions = useMemo(() => getCountryOptions(i18n.language), [i18n.language]);
 
@@ -44,9 +52,23 @@ const Contact = () => {
     setFormData((prev) => ({ ...prev, [name]: checked }));
   };
 
-  const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setPetImageFile(e.target.files[0]);
+  const handleFileChange = async (e) => {
+    const input = e.target;
+    const file = input.files?.[0];
+    setFileError('');
+
+    if (!file) {
+      return;
+    }
+
+    const code = await getImageError(file);
+
+    if (code) {
+      setFileError(t(IMAGE_ERROR_KEYS[code]));
+      setPetImageFile(null);
+      input.value = '';
+    } else {
+      setPetImageFile(file);
     }
   };
 
@@ -254,10 +276,15 @@ const Contact = () => {
             type="file"
             id="pet_image"
             name="pet_image"
-            accept="image/*"
+            accept="image/jpeg,image/png,image/webp"
             onChange={handleFileChange}
+            aria-invalid={Boolean(fileError)}
+            aria-describedby={fileError ? 'pet-image-error' : undefined}
             className="w-full text-sm text-muted file:mr-4 file:rounded-full file:border-0 file:bg-sand file:px-4 file:py-2 file:text-sm file:font-medium file:text-ink hover:file:bg-sand/70 cursor-pointer"
           />
+          {fileError && (
+            <p id="pet-image-error" className="mt-2 text-sm text-red-700">{fileError}</p>
+          )}
           {petImageFile && (
             <p className="mt-2 text-sm text-muted">{petImageFile.name}</p>
           )}

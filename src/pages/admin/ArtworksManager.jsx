@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react';
 import { getArtworks, createArtwork, updateArtwork, deleteArtwork, uploadArtworkImage } from '../../api/artworks';
 import { normalizeText } from '../../utils/text';
+import { getImageError } from '../../utils/image';
+
+const IMAGE_ERROR_MESSAGES = {
+  type: 'La imagen debe ser JPG, PNG o WEBP.',
+  size: 'La imagen no puede pesar más de 10 MB.',
+  pixels: 'La imagen tiene demasiados píxeles (máximo 25 megapíxeles).',
+};
 
 const ArtworksManager = () => {
   const [artworks, setArtworks] = useState([]);
@@ -15,6 +22,7 @@ const ArtworksManager = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [fileError, setFileError] = useState('');
 
   const fetchArtworks = async () => {
     try {
@@ -50,9 +58,23 @@ const ArtworksManager = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setArtworkImageFile(e.target.files[0]);
+  const handleFileChange = async (e) => {
+    const input = e.target;
+    const file = input.files?.[0];
+    setFileError('');
+
+    if (!file) {
+      return;
+    }
+
+    const code = await getImageError(file);
+
+    if (code) {
+      setFileError(IMAGE_ERROR_MESSAGES[code]);
+      setArtworkImageFile(null);
+      input.value = '';
+    } else {
+      setArtworkImageFile(file);
     }
   };
 
@@ -95,6 +117,7 @@ const ArtworksManager = () => {
 
       setFormData({ title: '', description: '' });
       setArtworkImageFile(null);
+      setFileError('');
       setEditingArtwork(null);
       fetchArtworks();
     } catch (err) {
@@ -124,6 +147,7 @@ const ArtworksManager = () => {
     setEditingArtwork(null);
     setFormData({ title: '', description: '' });
     setArtworkImageFile(null);
+    setFileError('');
     setSubmitError(null);
   };
 
@@ -188,11 +212,14 @@ const ArtworksManager = () => {
               type="file"
               id="image"
               name="image"
-              accept="image/*"
+              accept="image/jpeg,image/png,image/webp"
               onChange={handleFileChange}
               required={!editingArtwork}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
+            {fileError && (
+              <p className="mt-2 text-sm text-red-700">{fileError}</p>
+            )}
             {artworkImageFile && (
               <p className="mt-2 text-sm text-gray-600">{artworkImageFile.name}</p>
             )}
