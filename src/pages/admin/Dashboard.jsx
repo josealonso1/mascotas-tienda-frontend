@@ -9,6 +9,7 @@ const Dashboard = () => {
   const [artworksCount, setArtworksCount] = useState(0);
   const [testimonialsCount, setTestimonialsCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +24,7 @@ const Dashboard = () => {
         setTestimonialsCount(testimonialsData.length);
       } catch (err) {
         console.error('Error al cargar datos del dashboard:', err);
+        setError(true);
       } finally {
         setLoading(false);
       }
@@ -36,6 +38,10 @@ const Dashboard = () => {
 
   if (loading) {
     return <p className="text-center py-10">Cargando dashboard...</p>;
+  }
+
+  if (error) {
+    return <p className="text-center py-10 text-red-500">No se pudieron cargar los datos del panel</p>;
   }
 
   return (
