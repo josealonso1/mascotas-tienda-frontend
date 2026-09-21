@@ -4,6 +4,9 @@ import { createContactRequest, uploadPetImage } from '../../api/contactRequests'
 import { getCountryOptions } from '../../utils/countries';
 import { sanitizeWhatsapp, isValidWhatsapp } from '../../utils/phone';
 
+const labelClasses = 'block text-sm font-medium text-ink mb-2';
+const getInputClasses = (hasError = false) => 'w-full px-4 py-3 bg-white border rounded-xl text-ink placeholder:text-muted/60 focus:outline-none focus:ring-2 transition ' + (hasError ? 'border-red-500 focus:border-red-500 focus:ring-red-200' : 'border-ink/20 focus:border-brand focus:ring-brand/30');
+
 const Contact = () => {
   const { t, i18n } = useTranslation();
   const [formData, setFormData] = useState({
@@ -104,13 +107,14 @@ const Contact = () => {
 
   if (submitted) {
     return (
-      <div className="max-w-2xl mx-auto py-16 px-4">
-        <div className="bg-green-50 border border-green-200 rounded-lg p-8 text-center">
-          <h1 className="text-2xl font-bold text-green-800 mb-4">{t('contact.title')}</h1>
-          <p className="text-green-700">{t('contact.success')}</p>
+      <div className="max-w-2xl mx-auto py-12 px-4">
+        <div className="bg-white rounded-2xl shadow-sm p-10 text-center">
+          <div aria-hidden="true" className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-sage/15 text-3xl text-sage">✓</div>
+          <h1 className="font-display text-3xl font-bold text-ink mb-4">{t('contact.title')}</h1>
+          <p className="text-muted">{t('contact.success')}</p>
           <button
             onClick={() => setSubmitted(false)}
-            className="mt-6 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+            className="mt-8 px-6 py-3 bg-brand text-white font-medium rounded-full hover:bg-brand-dark transition"
           >
             {t('contact.sendAnother')}
           </button>
@@ -120,18 +124,18 @@ const Contact = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto py-16 px-4">
-      <h1 className="text-4xl font-bold text-center mb-8">{t('contact.title')}</h1>
-      
+    <div className="max-w-2xl mx-auto py-12 px-4">
+      <h1 className="font-display text-4xl md:text-5xl font-bold text-center text-ink mb-10">{t('contact.title')}</h1>
+
       {submitError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 text-red-700">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-red-800">
           {t('contact.error')}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6 bg-white rounded-2xl shadow-sm p-6 md:p-10">
         <div>
-          <label htmlFor="client_name" className="block text-sm font-medium mb-2">
+          <label htmlFor="client_name" className={labelClasses}>
             {t('contact.clientNameLabel')} *
           </label>
           <input
@@ -142,12 +146,12 @@ const Contact = () => {
             onChange={handleChange}
             placeholder={t('contact.clientNamePlaceholder')}
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={getInputClasses()}
           />
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium mb-2">
+          <label htmlFor="email" className={labelClasses}>
             {t('contact.emailLabel')} *
           </label>
           <input
@@ -158,12 +162,12 @@ const Contact = () => {
             onChange={handleChange}
             placeholder={t('contact.emailPlaceholder')}
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={getInputClasses()}
           />
         </div>
 
         <div>
-          <label htmlFor="whatsapp" className="block text-sm font-medium mb-2">
+          <label htmlFor="whatsapp" className={labelClasses}>
             {t('contact.whatsappLabel')} *
           </label>
           <input
@@ -176,15 +180,17 @@ const Contact = () => {
             inputMode="tel"
             autoComplete="tel"
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={getInputClasses(Boolean(fieldErrors.whatsapp))}
+            aria-invalid={Boolean(fieldErrors.whatsapp)}
+            aria-describedby={fieldErrors.whatsapp ? 'whatsapp-error' : undefined}
           />
           {fieldErrors.whatsapp && (
-            <p className="mt-1 text-sm text-red-600">{fieldErrors.whatsapp}</p>
+            <p id="whatsapp-error" className="mt-2 text-sm text-red-700">{fieldErrors.whatsapp}</p>
           )}
         </div>
 
         <div>
-          <label htmlFor="country" className="block text-sm font-medium mb-2">
+          <label htmlFor="country" className={labelClasses}>
             {t('contact.countryLabel')} *
           </label>
           <select
@@ -193,7 +199,9 @@ const Contact = () => {
             value={formData.country}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={getInputClasses(Boolean(fieldErrors.country))}
+            aria-invalid={Boolean(fieldErrors.country)}
+            aria-describedby={fieldErrors.country ? 'country-error' : undefined}
           >
             <option value="" disabled>
               {t('contact.countrySelectPlaceholder')}
@@ -205,12 +213,12 @@ const Contact = () => {
             ))}
           </select>
           {fieldErrors.country && (
-            <p className="mt-1 text-sm text-red-600">{fieldErrors.country}</p>
+            <p id="country-error" className="mt-2 text-sm text-red-700">{fieldErrors.country}</p>
           )}
         </div>
 
         <div>
-          <label htmlFor="pet_name" className="block text-sm font-medium mb-2">
+          <label htmlFor="pet_name" className={labelClasses}>
             {t('contact.petNameLabel')}
           </label>
           <input
@@ -220,12 +228,12 @@ const Contact = () => {
             value={formData.pet_name}
             onChange={handleChange}
             placeholder={t('contact.petNamePlaceholder')}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={getInputClasses()}
           />
         </div>
 
         <div>
-          <label htmlFor="notes" className="block text-sm font-medium mb-2">
+          <label htmlFor="notes" className={labelClasses}>
             {t('contact.notesLabel')}
           </label>
           <textarea
@@ -235,12 +243,12 @@ const Contact = () => {
             onChange={handleChange}
             placeholder={t('contact.notesPlaceholder')}
             rows={4}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={getInputClasses()}
           />
         </div>
 
         <div>
-          <label htmlFor="pet_image" className="block text-sm font-medium mb-2">
+          <label htmlFor="pet_image" className={labelClasses}>
             {t('contact.imageLabel')}
           </label>
           <input
@@ -249,10 +257,10 @@ const Contact = () => {
             name="pet_image"
             accept="image/*"
             onChange={handleFileChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full text-sm text-muted file:mr-4 file:rounded-full file:border-0 file:bg-sand file:px-4 file:py-2 file:text-sm file:font-medium file:text-ink hover:file:bg-sand/70 cursor-pointer"
           />
           {petImageFile && (
-            <p className="mt-2 text-sm text-gray-600">{petImageFile.name}</p>
+            <p className="mt-2 text-sm text-muted">{petImageFile.name}</p>
           )}
         </div>
 
@@ -263,9 +271,9 @@ const Contact = () => {
             name="wants_promotions"
             checked={formData.wants_promotions}
             onChange={handleCheckboxChange}
-            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            className="w-5 h-5 rounded accent-brand"
           />
-          <label htmlFor="wants_promotions" className="ml-2 text-sm">
+          <label htmlFor="wants_promotions" className="ml-3 text-sm text-ink">
             {t('contact.wantsPromotionsLabel')}
           </label>
         </div>
@@ -283,7 +291,7 @@ const Contact = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+          className="w-full px-6 py-3 bg-brand text-white font-medium rounded-full hover:bg-brand-dark transition disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {isSubmitting ? t('contact.submit') + '...' : t('contact.submit')}
         </button>

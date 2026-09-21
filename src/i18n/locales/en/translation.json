@@ -50,7 +50,7 @@
     "countryPlaceholder": "United States",
     "countrySelectPlaceholder": "Select your country",
     "countryRequiredError": "Country is required",
-    "whatsappInvalidError": "WhatsApp must be in E.164 format: + followed by country code and number (e.g. +51987654321)",
+    "whatsappInvalidError": "Enter your WhatsApp starting with + and your country code, digits only (e.g. +51987654321)",
     "petNameLabel": "Pet's name (optional)",
     "petNamePlaceholder": "Fido",
     "notesLabel": "Additional notes (optional)",

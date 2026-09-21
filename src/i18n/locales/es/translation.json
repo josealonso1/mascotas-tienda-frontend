@@ -50,7 +50,7 @@
     "countryPlaceholder": "Argentina",
     "countrySelectPlaceholder": "Selecciona tu país",
     "countryRequiredError": "El país es requerido",
-    "whatsappInvalidError": "El WhatsApp debe tener formato E.164: + seguido del código de país y número (ej. +51987654321)",
+    "whatsappInvalidError": "Escribe tu WhatsApp con el + y el código de país, solo números (ej. +51987654321)",
     "petNameLabel": "Nombre de tu mascota (opcional)",
     "petNamePlaceholder": "Firulais",
     "notesLabel": "Notas adicionales (opcional)",
