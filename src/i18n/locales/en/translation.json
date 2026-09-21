@@ -35,7 +35,8 @@
     "loading": "Loading...",
     "error": "Error loading data",
     "testimonialsTitle": "Testimonials for this portrait",
-    "close": "Close"
+    "close": "Close",
+    "empty": "There are no artworks in the gallery yet"
   },
   "contact": {
     "title": "Contact",

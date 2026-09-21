@@ -9,21 +9,45 @@ const ArtworkModal = ({ artwork, testimonials, onClose }) => {
     (testimonial) => testimonial.artwork_id === artwork.id
   );
 
+  useEffect(() => {
+    const savedOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.body.style.overflow = savedOverflow;
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [onClose]);
+
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/60 backdrop-blur-sm p-4"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto m-4"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="artwork-modal-title"
+        className="bg-cream rounded-2xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="p-6">
-          <div className="flex justify-between items-start mb-4">
-            <h2 className="text-2xl font-bold">{artwork.title}</h2>
+        <div className="p-6 md:p-8">
+          <div className="flex justify-between items-start gap-4 mb-4">
+            <h2 id="artwork-modal-title" className="font-display text-2xl md:text-3xl font-bold text-ink">{artwork.title}</h2>
             <button
+              type="button"
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+              aria-label={t('gallery.close')}
+              autoFocus
+              className="shrink-0 w-10 h-10 rounded-full text-2xl leading-none text-muted hover:text-ink hover:bg-sand transition"
             >
               ×
             </button>
@@ -31,19 +55,19 @@ const ArtworkModal = ({ artwork, testimonials, onClose }) => {
           <img
             src={artwork.image_url}
             alt={artwork.title}
-            className="w-full h-auto rounded-lg mb-4"
+            className="w-full max-h-[65vh] object-contain rounded-xl bg-sand mb-6"
           />
           {artwork.description && (
-            <p className="text-gray-700 mb-6">{artwork.description}</p>
+            <p className="text-muted leading-relaxed mb-8">{artwork.description}</p>
           )}
           {artworkTestimonials.length > 0 && (
             <div>
-              <h3 className="text-xl font-semibold mb-4">{t('gallery.testimonialsTitle')}</h3>
+              <h3 className="font-display text-xl font-bold text-ink mb-4">{t('gallery.testimonialsTitle')}</h3>
               <div className="space-y-4">
                 {artworkTestimonials.map((testimonial) => (
-                  <div key={testimonial.id} className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-700 mb-2">"{testimonial.content}"</p>
-                    <p className="font-semibold text-gray-900">- {testimonial.client_name}</p>
+                  <div key={testimonial.id} className="border-l-2 border-brand pl-4">
+                    <p className="font-display text-ink mb-1">{testimonial.content}</p>
+                    <p className="text-sm text-muted">— {testimonial.client_name}</p>
                   </div>
                 ))}
               </div>
@@ -94,26 +118,32 @@ const Gallery = () => {
   }
 
   return (
-    <div className="py-8">
-      <h1 className="text-4xl font-bold text-center mb-8">{t('pages.gallery')}</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 max-w-7xl mx-auto">
-        {artworks.map((artwork) => (
-          <div
-            key={artwork.id}
-            className="bg-white rounded-lg shadow overflow-hidden cursor-pointer hover:shadow-lg transition"
-            onClick={() => setSelectedArtwork(artwork)}
-          >
-            <img
-              src={artwork.image_url}
-              alt={artwork.title}
-              className="w-full h-64 object-cover"
-            />
-            <div className="p-4">
-              <h3 className="font-semibold text-lg">{artwork.title}</h3>
-            </div>
-          </div>
-        ))}
-      </div>
+    <div className="py-12 px-4">
+      <h1 className="font-display text-4xl md:text-5xl font-bold text-center text-ink mb-10">{t('pages.gallery')}</h1>
+      {artworks.length === 0 ? (
+        <p className="text-center text-muted py-10">{t('gallery.empty')}</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {artworks.map((artwork) => (
+            <button
+              type="button"
+              key={artwork.id}
+              onClick={() => setSelectedArtwork(artwork)}
+              className="group text-left rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+            >
+              <div className="aspect-[4/5] overflow-hidden rounded-2xl bg-sand shadow-sm group-hover:shadow-md transition">
+                <img
+                  src={artwork.image_url}
+                  alt={artwork.title}
+                  className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+              <h3 className="mt-3 font-display text-lg font-medium text-ink group-hover:text-brand transition">{artwork.title}</h3>
+            </button>
+          ))}
+        </div>
+      )}
       {selectedArtwork && (
         <ArtworkModal
           artwork={selectedArtwork}

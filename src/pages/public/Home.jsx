@@ -55,7 +55,7 @@ const HighlightsCarousel = () => {
 
   if (artworks.length === 0) return null;
 
-  const displayArtworks = [...artworks, ...artworks];
+  const displayArtworks = [...artworks, ...artworks, ...artworks, ...artworks];
 
   return (
     <section className="bg-cream py-16">
