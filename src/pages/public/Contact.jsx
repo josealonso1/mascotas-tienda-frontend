@@ -83,7 +83,6 @@ const Contact = () => {
       await createContactRequest({
         ...formData,
         pet_image_url: imageUrl,
-        honeypot: '',
       });
 
       setSubmitted(true);
