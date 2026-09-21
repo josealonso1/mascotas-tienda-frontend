@@ -36,12 +36,12 @@ const ContactRequestsManager = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('¿Seguro que querés eliminar esta solicitud de contacto? Esta acción no se puede deshacer.')) {
+    if (window.confirm('¿Seguro que quieres eliminar esta solicitud de contacto? Esta acción no se puede deshacer.')) {
       try {
         await deleteContactRequest(id);
         fetchContactRequests();
       } catch (err) {
-        setError('Error al eliminar la solicitud');
+        alert('Error al eliminar la solicitud');
       }
     }
   };
@@ -209,7 +209,7 @@ const ContactRequestsManager = () => {
 
       {selectedRequest && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
           onClick={() => setSelectedRequest(null)}
         >
           <div

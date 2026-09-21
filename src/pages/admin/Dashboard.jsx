@@ -46,8 +46,8 @@ const Dashboard = () => {
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-8">
           <p className="text-lg font-semibold text-yellow-800 mb-2">
             {pendingCount === 1
-              ? 'Tenés 1 solicitud de contacto pendiente'
-              : `Tenés ${pendingCount} solicitudes de contacto pendientes`}
+              ? 'Tienes 1 solicitud de contacto pendiente'
+              : `Tienes ${pendingCount} solicitudes de contacto pendientes`}
           </p>
           <Link
             to="/admin/contact-requests"

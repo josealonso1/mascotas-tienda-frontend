@@ -110,12 +110,12 @@ const ArtworksManager = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('¿Seguro que querés eliminar este artwork? Esta acción no se puede deshacer.')) {
+    if (window.confirm('¿Seguro que quieres eliminar este artwork? Esta acción no se puede deshacer.')) {
       try {
         await deleteArtwork(id);
         fetchArtworks();
       } catch (err) {
-        setError('Error al eliminar el artwork');
+        alert('Error al eliminar el artwork');
       }
     }
   };

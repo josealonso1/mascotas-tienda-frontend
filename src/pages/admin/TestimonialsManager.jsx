@@ -119,12 +119,12 @@ const TestimonialsManager = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('¿Seguro que querés eliminar este testimonio? Esta acción no se puede deshacer.')) {
+    if (window.confirm('¿Seguro que quieres eliminar este testimonio? Esta acción no se puede deshacer.')) {
       try {
         await deleteTestimonial(id);
         fetchTestimonials();
       } catch (err) {
-        setError('Error al eliminar el testimonio');
+        alert('Error al eliminar el testimonio');
       }
     }
   };
