@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { getArtworks } from '../../api/artworks';
 import { getTestimonials } from '../../api/testimonials';
 
@@ -7,9 +8,17 @@ const Hero = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="py-20 text-center">
-      <h1 className="text-5xl font-bold mb-4">{t('home.heroTitle')}</h1>
-      <p className="text-xl text-gray-600">{t('home.heroSubtitle')}</p>
+    <section className="bg-cream py-20 md:py-28 px-4 text-center">
+      <h1 className="font-display text-4xl md:text-6xl font-bold text-ink mb-6 max-w-3xl mx-auto">{t('home.heroTitle')}</h1>
+      <p className="text-lg md:text-xl text-muted max-w-2xl mx-auto mb-10">{t('home.heroSubtitle')}</p>
+      <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <Link to="/contacto" className="px-8 py-3 bg-brand text-white font-medium rounded-full hover:bg-brand-dark transition">
+          {t('home.heroCta')}
+        </Link>
+        <Link to="/galeria" className="px-8 py-3 border border-ink/20 text-ink font-medium rounded-full hover:border-brand hover:text-brand transition">
+          {t('home.heroSecondaryCta')}
+        </Link>
+      </div>
     </section>
   );
 };
@@ -44,21 +53,23 @@ const HighlightsCarousel = () => {
     return <p className="text-center py-10 text-red-500">{t('home.error')}</p>;
   }
 
+  if (artworks.length === 0) return null;
+
   const displayArtworks = [...artworks, ...artworks];
 
   return (
-    <section className="py-16">
-      <h2 className="text-3xl font-bold text-center mb-8">{t('home.highlightsTitle')}</h2>
-      <div className="overflow-hidden">
-        <div className="flex animate-scroll">
+    <section className="bg-cream py-16">
+      <h2 className="font-display text-3xl font-bold text-center text-ink mb-10">{t('home.highlightsTitle')}</h2>
+      <div className="overflow-hidden motion-reduce:overflow-x-auto">
+        <div className="flex w-max animate-scroll hover:[animation-play-state:paused] motion-reduce:animate-none">
           {displayArtworks.map((artwork, index) => (
-            <div key={`${artwork.id}-${index}`} className="flex-shrink-0 w-80 mx-4">
+            <div key={`${artwork.id}-${index}`} className="shrink-0 w-80 mx-4">
               <img
                 src={artwork.image_url}
                 alt={artwork.title}
-                className="w-full h-64 object-cover rounded-lg"
+                className="w-full h-64 object-cover rounded-2xl shadow-sm"
               />
-              <p className="mt-2 text-center font-medium">{artwork.title}</p>
+              <p className="mt-3 text-center font-medium text-ink">{artwork.title}</p>
             </div>
           ))}
         </div>
@@ -96,14 +107,17 @@ const Testimonials = () => {
     return <p className="text-center py-10 text-red-500">{t('home.error')}</p>;
   }
 
+  if (testimonials.length === 0) return null;
+
   return (
-    <section className="py-16 bg-gray-50">
-      <h2 className="text-3xl font-bold text-center mb-8">{t('home.testimonialsTitle')}</h2>
-      <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 px-4">
+    <section className="bg-sand py-16 px-4">
+      <h2 className="font-display text-3xl font-bold text-center text-ink mb-10">{t('home.testimonialsTitle')}</h2>
+      <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         {testimonials.map((testimonial) => (
-          <div key={testimonial.id} className="bg-white p-6 rounded-lg shadow">
-            <p className="text-gray-700 mb-4">"{testimonial.content}"</p>
-            <p className="font-semibold text-gray-900">- {testimonial.client_name}</p>
+          <div key={testimonial.id} className="bg-white p-8 rounded-2xl shadow-sm">
+            <span aria-hidden="true" className="font-display text-5xl leading-none text-brand">&ldquo;</span>
+            <p className="font-display font-medium text-lg text-ink mb-4">{testimonial.content}</p>
+            <p className="text-sm font-medium text-muted">— {testimonial.client_name}</p>
           </div>
         ))}
       </div>
@@ -115,14 +129,14 @@ const SocialLinks = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="py-16 text-center">
-      <h2 className="text-3xl font-bold mb-8">{t('home.socialTitle')}</h2>
-      <div className="flex justify-center gap-6">
+    <section className="bg-cream py-16 px-4 text-center">
+      <h2 className="font-display text-3xl font-bold text-center text-ink mb-10">{t('home.socialTitle')}</h2>
+      <div className="flex flex-wrap justify-center gap-4">
         <a
           href="https://tiktok.com/@placeholder"
           target="_blank"
           rel="noopener noreferrer"
-          className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition"
+          className="px-6 py-3 border border-ink/20 text-ink font-medium rounded-full hover:border-brand hover:text-brand transition"
         >
           {t('home.watchOnTikTok')}
         </a>
@@ -130,7 +144,7 @@ const SocialLinks = () => {
           href="https://twitch.tv/placeholder"
           target="_blank"
           rel="noopener noreferrer"
-          className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
+          className="px-6 py-3 border border-ink/20 text-ink font-medium rounded-full hover:border-brand hover:text-brand transition"
         >
           {t('home.watchOnTwitch')}
         </a>

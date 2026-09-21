@@ -27,7 +27,9 @@
     "watchOnTikTok": "Watch on TikTok",
     "watchOnTwitch": "Watch on Twitch",
     "loading": "Loading...",
-    "error": "Error loading data"
+    "error": "Error loading data",
+    "heroCta": "Order your portrait",
+    "heroSecondaryCta": "View gallery"
   },
   "gallery": {
     "loading": "Loading...",

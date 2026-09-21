@@ -27,7 +27,9 @@
     "watchOnTikTok": "Ver en TikTok",
     "watchOnTwitch": "Ver en Twitch",
     "loading": "Cargando...",
-    "error": "Error al cargar los datos"
+    "error": "Error al cargar los datos",
+    "heroCta": "Pide tu retrato",
+    "heroSecondaryCta": "Ver galería"
   },
   "gallery": {
     "loading": "Cargando...",
