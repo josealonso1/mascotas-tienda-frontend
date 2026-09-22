@@ -28,6 +28,8 @@
     "watchOnTwitch": "Watch on Twitch",
     "loading": "Loading...",
     "error": "Error loading data",
+    "loadErrorDescription": "We couldn’t load this content. Check your connection and try again.",
+    "retry": "Try again",
     "heroCta": "Order your portrait",
     "heroSecondaryCta": "View gallery"
   },

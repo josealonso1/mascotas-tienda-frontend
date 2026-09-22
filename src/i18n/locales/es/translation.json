@@ -28,6 +28,8 @@
     "watchOnTwitch": "Ver en Twitch",
     "loading": "Cargando...",
     "error": "Error al cargar los datos",
+    "loadErrorDescription": "No pudimos cargar este contenido. Comprueba tu conexión e inténtalo de nuevo.",
+    "retry": "Reintentar",
     "heroCta": "Pide tu retrato",
     "heroSecondaryCta": "Ver galería"
   },

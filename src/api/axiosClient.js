@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  // In development, Vite forwards /api requests to the configured backend.
+  // This keeps the browser on one origin and avoids CORS failures locally.
+  baseURL: import.meta.env.DEV ? '' : import.meta.env.VITE_API_BASE_URL,
 });
 
 axiosClient.interceptors.request.use((config) => {

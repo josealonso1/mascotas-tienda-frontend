@@ -28,9 +28,13 @@ const HighlightsCarousel = () => {
   const [artworks, setArtworks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [reloadCount, setReloadCount] = useState(0);
 
   useEffect(() => {
     const fetchArtworks = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
         const data = await getArtworks();
         const sorted = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -43,14 +47,22 @@ const HighlightsCarousel = () => {
     };
 
     fetchArtworks();
-  }, []);
+  }, [reloadCount]);
 
   if (loading) {
-    return <p className="text-center py-10">{t('home.loading')}</p>;
+    return <p className="text-center py-10" aria-live="polite">{t('home.loading')}</p>;
   }
 
   if (error) {
-    return <p className="text-center py-10 text-red-500">{t('home.error')}</p>;
+    return (
+      <section className="bg-cream px-4 py-16 text-center" aria-live="polite">
+        <h2 className="font-display text-3xl font-bold text-ink mb-3">{t('home.highlightsTitle')}</h2>
+        <p className="text-muted">{t('home.loadErrorDescription')}</p>
+        <button type="button" onClick={() => setReloadCount((count) => count + 1)} className="mt-6 px-6 py-3 bg-brand text-white font-medium rounded-full hover:bg-brand-dark transition">
+          {t('home.retry')}
+        </button>
+      </section>
+    );
   }
 
   if (artworks.length === 0) return null;
@@ -83,9 +95,13 @@ const Testimonials = () => {
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [reloadCount, setReloadCount] = useState(0);
 
   useEffect(() => {
     const fetchTestimonials = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
         const data = await getTestimonials();
         setTestimonials(data.slice(0, 4));
@@ -97,14 +113,22 @@ const Testimonials = () => {
     };
 
     fetchTestimonials();
-  }, []);
+  }, [reloadCount]);
 
   if (loading) {
-    return <p className="text-center py-10">{t('home.loading')}</p>;
+    return <p className="text-center py-10" aria-live="polite">{t('home.loading')}</p>;
   }
 
   if (error) {
-    return <p className="text-center py-10 text-red-500">{t('home.error')}</p>;
+    return (
+      <section className="bg-sand px-4 py-16 text-center" aria-live="polite">
+        <h2 className="font-display text-3xl font-bold text-ink mb-3">{t('home.testimonialsTitle')}</h2>
+        <p className="text-muted">{t('home.loadErrorDescription')}</p>
+        <button type="button" onClick={() => setReloadCount((count) => count + 1)} className="mt-6 px-6 py-3 bg-brand text-white font-medium rounded-full hover:bg-brand-dark transition">
+          {t('home.retry')}
+        </button>
+      </section>
+    );
   }
 
   if (testimonials.length === 0) return null;
