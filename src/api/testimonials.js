@@ -15,6 +15,11 @@ export const createTestimonial = async (data) => {
   return response.data;
 };
 
+export const submitTestimonial = async (data) => {
+  const response = await axiosClient.post('/api/testimonials/submit', data);
+  return response.data;
+};
+
 export const updateTestimonial = async (id, data) => {
   const response = await axiosClient.put(`/api/testimonials/${id}`, data);
   return response.data;

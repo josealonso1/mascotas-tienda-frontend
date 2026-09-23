@@ -42,8 +42,22 @@
     "error": "Error loading data",
     "testimonialsTitle": "Testimonials for this portrait",
     "close": "Close",
-      "closeDialog": "Close artwork details",
+    "closeDialog": "Close artwork details",
+    "shareTestimonial": "Share your experience",
     "empty": "There are no artworks in the gallery yet"
+  },
+  "testimonialForm": {
+    "title": "Share your experience",
+    "description": "Your comment will be reviewed before it is published on the site.",
+    "nameLabel": "Your name",
+    "artworkLabel": "Related portrait (optional)",
+    "artworkPlaceholder": "Do not select a portrait",
+    "contentLabel": "Your comment",
+    "submit": "Send comment",
+    "successTitle": "Thanks for sharing!",
+    "successDescription": "We received your comment and will review it before publishing it.",
+    "backHome": "Back to home",
+    "error": "We couldn't send your comment. Please try again."
   },
   "contact": {
     "title": "Contact",

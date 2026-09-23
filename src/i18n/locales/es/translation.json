@@ -42,8 +42,22 @@
     "error": "Error al cargar los datos",
     "testimonialsTitle": "Testimonios de este retrato",
     "close": "Cerrar",
-      "closeDialog": "Cerrar detalle de la obra",
+    "closeDialog": "Cerrar detalle de la obra",
+    "shareTestimonial": "Comparte tu experiencia",
     "empty": "Todavía no hay obras en la galería"
+  },
+  "testimonialForm": {
+    "title": "Comparte tu experiencia",
+    "description": "Tu comentario será revisado antes de publicarse en el sitio.",
+    "nameLabel": "Tu nombre",
+    "artworkLabel": "Retrato relacionado (opcional)",
+    "artworkPlaceholder": "No seleccionar un retrato",
+    "contentLabel": "Tu comentario",
+    "submit": "Enviar comentario",
+    "successTitle": "¡Gracias por compartirlo!",
+    "successDescription": "Hemos recibido tu comentario y lo revisaremos antes de publicarlo.",
+    "backHome": "Volver al inicio",
+    "error": "No pudimos enviar tu comentario. Inténtalo de nuevo."
   },
   "contact": {
     "title": "Contacto",

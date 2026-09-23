@@ -4,6 +4,7 @@ import AdminLayout from './layouts/AdminLayout';
 import Home from './pages/public/Home';
 import Gallery from './pages/public/Gallery';
 import Contact from './pages/public/Contact';
+import TestimonialSubmission from './pages/public/TestimonialSubmission';
 import AdminLogin from './pages/admin/AdminLogin';
 import Dashboard from './pages/admin/Dashboard';
 import ArtworksManager from './pages/admin/ArtworksManager';
@@ -18,6 +19,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/galeria" element={<Gallery />} />
         <Route path="/contacto" element={<Contact />} />
+        <Route path="/testimonio" element={<TestimonialSubmission />} />
         <Route path="*" element={<h1>Página no encontrada</h1>} />
       </Route>
       <Route element={<AdminLayout />}>

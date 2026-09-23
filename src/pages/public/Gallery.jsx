@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getArtworks } from '../../api/artworks';
 import { getTestimonials } from '../../api/testimonials';
@@ -98,6 +99,12 @@ const ArtworkModal = ({ artwork, testimonials, onClose }) => {
               </div>
             </div>
           )}
+          <Link
+            to={`/testimonio?artwork=${artwork.id}`}
+            className="mt-8 inline-flex rounded-full border border-brand px-5 py-2.5 font-medium text-brand transition hover:bg-brand hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+          >
+            {t('gallery.shareTestimonial')}
+          </Link>
         </div>
       </div>
     </div>
