@@ -155,8 +155,10 @@ const ArtworksManager = () => {
 
   const handleVisibilityChange = async (artwork) => {
     try {
-      await updateArtwork(artwork.id, { visible: artwork.visible === false });
-      fetchArtworks();
+      const updatedArtwork = await updateArtwork(artwork.id, { visible: artwork.visible === false });
+      setArtworks((currentArtworks) => currentArtworks.map((currentArtwork) => (
+        currentArtwork.id === updatedArtwork.id ? updatedArtwork : currentArtwork
+      )));
     } catch (err) {
       alert('Error al cambiar la visibilidad del artwork');
     }

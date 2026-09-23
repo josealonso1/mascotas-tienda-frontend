@@ -35,7 +35,9 @@
     "previousWorks": "View previous artworks",
     "nextWorks": "View more artworks",
     "heroCta": "Order your portrait",
-    "heroSecondaryCta": "View gallery"
+    "heroSecondaryCta": "View gallery",
+    "noTestimonials": "There are no published testimonials yet.",
+    "shareTestimonial": "Share your experience"
   },
   "gallery": {
     "loading": "Loading...",

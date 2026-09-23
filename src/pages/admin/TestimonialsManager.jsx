@@ -131,8 +131,10 @@ const TestimonialsManager = () => {
 
   const handleVisibilityChange = async (testimonial) => {
     try {
-      await updateTestimonial(testimonial.id, { visible: !testimonial.visible });
-      fetchTestimonials();
+      const updatedTestimonial = await updateTestimonial(testimonial.id, { visible: !testimonial.visible });
+      setTestimonials((currentTestimonials) => currentTestimonials.map((currentTestimonial) => (
+        currentTestimonial.id === updatedTestimonial.id ? updatedTestimonial : currentTestimonial
+      )));
     } catch (err) {
       alert('Error al cambiar la visibilidad del testimonio');
     }

@@ -35,7 +35,9 @@
     "previousWorks": "Ver trabajos anteriores",
     "nextWorks": "Ver más trabajos",
     "heroCta": "Pide tu retrato",
-    "heroSecondaryCta": "Ver galería"
+    "heroSecondaryCta": "Ver galería",
+    "noTestimonials": "Aún no hay testimonios publicados.",
+    "shareTestimonial": "Comparte tu experiencia"
   },
   "gallery": {
     "loading": "Cargando...",

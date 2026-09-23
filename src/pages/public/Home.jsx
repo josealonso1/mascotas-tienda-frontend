@@ -181,19 +181,26 @@ const Testimonials = () => {
     );
   }
 
-  if (testimonials.length === 0) return null;
-
   return (
     <section className="bg-sand py-16 px-4">
       <h2 className="font-display text-3xl font-bold text-center text-ink mb-10">{t('home.testimonialsTitle')}</h2>
-      <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-        {testimonials.map((testimonial) => (
-          <div key={testimonial.id} className="bg-white p-8 rounded-2xl shadow-sm">
-            <span aria-hidden="true" className="font-display text-5xl leading-none text-brand">&ldquo;</span>
-            <p className="font-display font-medium text-lg text-ink mb-4">{testimonial.content}</p>
-            <p className="text-sm font-medium text-muted">— {testimonial.client_name}</p>
-          </div>
-        ))}
+      {testimonials.length === 0 ? (
+        <p className="text-center text-muted">{t('home.noTestimonials')}</p>
+      ) : (
+        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+          {testimonials.map((testimonial) => (
+            <div key={testimonial.id} className="bg-white p-8 rounded-2xl shadow-sm">
+              <span aria-hidden="true" className="font-display text-5xl leading-none text-brand">&ldquo;</span>
+              <p className="font-display font-medium text-lg text-ink mb-4">{testimonial.content}</p>
+              <p className="text-sm font-medium text-muted">— {testimonial.client_name}</p>
+            </div>
+          ))}
+        </div>
+      )}
+      <div className="mt-10 text-center">
+        <Link to="/testimonio" className="inline-flex rounded-full border border-brand px-6 py-3 font-medium text-brand transition hover:bg-brand hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand">
+          {t('home.shareTestimonial')}
+        </Link>
       </div>
     </section>
   );
