@@ -2,7 +2,8 @@
   "nav": {
     "home": "Inicio",
     "gallery": "Galería",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "skipToContent": "Saltar al contenido"
   },
   "footer": {
     "copyright": "© 2026 Mascotas Tienda - Arte de Mascotas"
@@ -30,6 +31,9 @@
     "error": "Error al cargar los datos",
     "loadErrorDescription": "No pudimos cargar este contenido. Comprueba tu conexión e inténtalo de nuevo.",
     "retry": "Reintentar",
+    "worksCarousel": "Galería horizontal de trabajos",
+    "previousWorks": "Ver trabajos anteriores",
+    "nextWorks": "Ver más trabajos",
     "heroCta": "Pide tu retrato",
     "heroSecondaryCta": "Ver galería"
   },
@@ -38,6 +42,7 @@
     "error": "Error al cargar los datos",
     "testimonialsTitle": "Testimonios de este retrato",
     "close": "Cerrar",
+      "closeDialog": "Cerrar detalle de la obra",
     "empty": "Todavía no hay obras en la galería"
   },
   "contact": {

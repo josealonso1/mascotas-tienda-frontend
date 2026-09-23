@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
+  const focusRingClasses = 'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand';
 
   const navLinkClasses = ({ isActive }) =>
-  `pb-1 border-b-2 font-medium transition ${
+  `pb-1 border-b-2 font-medium transition ${focusRingClasses} ${
     isActive
       ? 'text-brand border-brand'
       : 'text-ink hover:text-brand border-transparent'
@@ -31,7 +32,7 @@ const Navbar = () => {
               type="button"
               onClick={() => i18n.changeLanguage('es')}
               aria-pressed={i18n.resolvedLanguage === 'es'}
-              className={`px-3 py-1 text-sm font-medium transition ${
+              className={`px-3 py-1 text-sm font-medium transition focus-visible:relative focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${
                 i18n.resolvedLanguage === 'es'
                   ? 'bg-brand text-white'
                   : 'text-muted hover:text-ink'
@@ -43,7 +44,7 @@ const Navbar = () => {
               type="button"
               onClick={() => i18n.changeLanguage('en')}
               aria-pressed={i18n.resolvedLanguage === 'en'}
-              className={`px-3 py-1 text-sm font-medium transition ${
+              className={`px-3 py-1 text-sm font-medium transition focus-visible:relative focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${
                 i18n.resolvedLanguage === 'en'
                   ? 'bg-brand text-white'
                   : 'text-muted hover:text-ink'
@@ -71,10 +72,18 @@ const Footer = () => {
 };
 
 const PublicLayout = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="min-h-screen flex flex-col">
+      <a
+        href="#main-content"
+        className="sr-only fixed left-4 top-4 z-50 rounded-lg bg-ink px-4 py-3 font-medium text-white shadow-lg focus:not-sr-only focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+      >
+        {t('nav.skipToContent')}
+      </a>
       <Navbar />
-      <main className="flex-1">
+      <main id="main-content" className="flex-1 scroll-mt-20">
         <Outlet />
       </main>
       <Footer />

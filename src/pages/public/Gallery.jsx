@@ -1,43 +1,68 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getArtworks } from '../../api/artworks';
 import { getTestimonials } from '../../api/testimonials';
 
 const ArtworkModal = ({ artwork, testimonials, onClose }) => {
   const { t } = useTranslation();
+  const dialogRef = useRef(null);
+  const closeButtonRef = useRef(null);
   const artworkTestimonials = testimonials.filter(
     (testimonial) => testimonial.artwork_id === artwork.id
   );
 
   useEffect(() => {
     const savedOverflow = document.body.style.overflow;
+    const previouslyFocusedElement = document.activeElement;
     document.body.style.overflow = 'hidden';
-
-    const handleEscape = (event) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    document.addEventListener('keydown', handleEscape);
+    closeButtonRef.current?.focus();
 
     return () => {
       document.body.style.overflow = savedOverflow;
-      document.removeEventListener('keydown', handleEscape);
+      previouslyFocusedElement?.focus();
     };
-  }, [onClose]);
+  }, []);
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Escape') {
+      onClose();
+      return;
+    }
+
+    if (event.key !== 'Tab') return;
+
+    const focusableElements = dialogRef.current?.querySelectorAll(
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+    const firstElement = focusableElements?.[0];
+    const lastElement = focusableElements?.[focusableElements.length - 1];
+
+    if (!firstElement || !lastElement) return;
+
+    if (event.shiftKey && document.activeElement === firstElement) {
+      event.preventDefault();
+      lastElement.focus();
+    } else if (!event.shiftKey && document.activeElement === lastElement) {
+      event.preventDefault();
+      firstElement.focus();
+    }
+  };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/60 backdrop-blur-sm p-4"
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/60 p-4 backdrop-blur-sm">
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label={t('gallery.closeDialog')}
+        className="absolute inset-0 cursor-default"
+      />
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="artwork-modal-title"
-        className="bg-cream rounded-2xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
+        onKeyDown={handleKeyDown}
+        className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto overscroll-contain rounded-2xl bg-cream shadow-xl"
       >
         <div className="p-6 md:p-8">
           <div className="flex justify-between items-start gap-4 mb-4">
@@ -46,8 +71,8 @@ const ArtworkModal = ({ artwork, testimonials, onClose }) => {
               type="button"
               onClick={onClose}
               aria-label={t('gallery.close')}
-              autoFocus
-              className="shrink-0 w-10 h-10 rounded-full text-2xl leading-none text-muted hover:text-ink hover:bg-sand transition"
+              ref={closeButtonRef}
+              className="h-10 w-10 shrink-0 rounded-full text-2xl leading-none text-muted hover:bg-sand hover:text-ink transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
             >
               ×
             </button>

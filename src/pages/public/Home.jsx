@@ -1,23 +1,38 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { getArtworks } from '../../api/artworks';
 import { getTestimonials } from '../../api/testimonials';
+import heroPetIllustration from '../../assets/hero-pet-illustration.svg';
 
 const Hero = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="bg-cream py-20 md:py-28 px-4 text-center">
-      <h1 className="font-display text-4xl md:text-6xl font-bold text-ink mb-6 max-w-3xl mx-auto">{t('home.heroTitle')}</h1>
-      <p className="text-lg md:text-xl text-muted max-w-2xl mx-auto mb-10">{t('home.heroSubtitle')}</p>
-      <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-        <Link to="/contacto" className="px-8 py-3 bg-brand text-white font-medium rounded-full hover:bg-brand-dark transition">
-          {t('home.heroCta')}
-        </Link>
-        <Link to="/galeria" className="px-8 py-3 border border-ink/20 text-ink font-medium rounded-full hover:border-brand hover:text-brand transition">
-          {t('home.heroSecondaryCta')}
-        </Link>
+    <section className="bg-cream px-4 py-16 md:py-24">
+      <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2 md:gap-16">
+        <div className="order-2 text-center md:order-1 md:text-left">
+          <h1 className="font-display text-balance text-4xl font-bold text-ink md:text-6xl">{t('home.heroTitle')}</h1>
+          <p className="mx-auto mt-6 max-w-xl text-lg text-muted md:mx-0 md:text-xl">{t('home.heroSubtitle')}</p>
+          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row md:items-start">
+            <Link to="/contacto" className="px-8 py-3 bg-brand text-white font-medium rounded-full hover:bg-brand-dark transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink">
+              {t('home.heroCta')}
+            </Link>
+            <Link to="/galeria" className="px-8 py-3 border border-ink/20 text-ink font-medium rounded-full hover:border-brand hover:text-brand transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand">
+              {t('home.heroSecondaryCta')}
+            </Link>
+          </div>
+        </div>
+        <div className="order-1 mx-auto w-full max-w-md md:order-2">
+          <img
+            src={heroPetIllustration}
+            alt=""
+            aria-hidden="true"
+            width="600"
+            height="600"
+            className="w-full drop-shadow-xl"
+          />
+        </div>
       </div>
     </section>
   );
@@ -29,6 +44,16 @@ const HighlightsCarousel = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [reloadCount, setReloadCount] = useState(0);
+  const carouselRef = useRef(null);
+
+  const scrollCarousel = (direction) => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    carouselRef.current?.scrollBy({
+      left: direction * 360,
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    });
+  };
 
   useEffect(() => {
     const fetchArtworks = async () => {
@@ -67,24 +92,49 @@ const HighlightsCarousel = () => {
 
   if (artworks.length === 0) return null;
 
-  const displayArtworks = [...artworks, ...artworks, ...artworks, ...artworks];
-
   return (
     <section className="bg-cream py-16">
-      <h2 className="font-display text-3xl font-bold text-center text-ink mb-10">{t('home.highlightsTitle')}</h2>
-      <div className="overflow-hidden motion-reduce:overflow-x-auto">
-        <div className="flex w-max animate-scroll hover:[animation-play-state:paused] motion-reduce:animate-none">
-          {displayArtworks.map((artwork, index) => (
-            <div key={`${artwork.id}-${index}`} className="shrink-0 w-80 mx-4">
+      <div className="mx-auto mb-10 flex max-w-6xl items-center justify-between gap-4 px-4">
+        <h2 className="font-display text-3xl font-bold text-ink">{t('home.highlightsTitle')}</h2>
+        <div className="flex shrink-0 gap-3">
+          <button
+            type="button"
+            onClick={() => scrollCarousel(-1)}
+            aria-label={t('home.previousWorks')}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-ink/20 text-xl text-ink hover:border-brand hover:text-brand transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          >
+            <span aria-hidden="true">←</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollCarousel(1)}
+            aria-label={t('home.nextWorks')}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-ink/20 text-xl text-ink hover:border-brand hover:text-brand transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          >
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
+      <div
+        ref={carouselRef}
+        role="region"
+        aria-label={t('home.worksCarousel')}
+        tabIndex="0"
+        className="flex snap-x snap-mandatory gap-6 overflow-x-auto px-4 pb-4 scroll-smooth focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+      >
+        {artworks.map((artwork) => (
+          <div key={artwork.id} className="w-[min(86vw,26rem)] shrink-0 snap-start">
               <img
                 src={artwork.image_url}
                 alt={artwork.title}
-                className="w-full h-64 object-cover rounded-2xl shadow-sm"
+                width="320"
+                height="256"
+                loading="lazy"
+                className="h-74 w-full rounded-2xl object-cover shadow-sm"
               />
               <p className="mt-3 text-center font-medium text-ink">{artwork.title}</p>
-            </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </section>
   );

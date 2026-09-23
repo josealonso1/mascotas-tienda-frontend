@@ -2,7 +2,8 @@
   "nav": {
     "home": "Home",
     "gallery": "Gallery",
-    "contact": "Contact"
+    "contact": "Contact",
+    "skipToContent": "Skip to content"
   },
   "footer": {
     "copyright": "© 2026 Mascotas Tienda - Pet Art"
@@ -30,6 +31,9 @@
     "error": "Error loading data",
     "loadErrorDescription": "We couldn’t load this content. Check your connection and try again.",
     "retry": "Try again",
+    "worksCarousel": "Horizontal gallery of artworks",
+    "previousWorks": "View previous artworks",
+    "nextWorks": "View more artworks",
     "heroCta": "Order your portrait",
     "heroSecondaryCta": "View gallery"
   },
@@ -38,6 +42,7 @@
     "error": "Error loading data",
     "testimonialsTitle": "Testimonials for this portrait",
     "close": "Close",
+      "closeDialog": "Close artwork details",
     "empty": "There are no artworks in the gallery yet"
   },
   "contact": {
