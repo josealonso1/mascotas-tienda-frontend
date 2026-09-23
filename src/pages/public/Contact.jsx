@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createContactRequest, uploadPetImage } from '../../api/contactRequests';
 import { getCountryOptions } from '../../utils/countries';
@@ -35,6 +35,8 @@ const Contact = () => {
     whatsapp: '',
   });
   const [fileError, setFileError] = useState('');
+  const countryRef = useRef(null);
+  const whatsappRef = useRef(null);
 
   const countryOptions = useMemo(() => getCountryOptions(i18n.language), [i18n.language]);
 
@@ -81,6 +83,7 @@ const Contact = () => {
     // Validar país
     if (!formData.country) {
       setFieldErrors((prev) => ({ ...prev, country: t('contact.countryRequiredError') }));
+      countryRef.current?.focus();
       setIsSubmitting(false);
       return;
     }
@@ -88,6 +91,7 @@ const Contact = () => {
     // Validar WhatsApp
     if (!isValidWhatsapp(formData.whatsapp)) {
       setFieldErrors((prev) => ({ ...prev, whatsapp: t('contact.whatsappInvalidError') }));
+      whatsappRef.current?.focus();
       setIsSubmitting(false);
       return;
     }
@@ -132,10 +136,11 @@ const Contact = () => {
         <div className="bg-white rounded-2xl shadow-sm p-10 text-center">
           <div aria-hidden="true" className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-sage/15 text-3xl text-sage">✓</div>
           <h1 className="font-display text-3xl font-bold text-ink mb-4">{t('contact.title')}</h1>
-          <p className="text-muted">{t('contact.success')}</p>
+          <p className="text-muted" aria-live="polite">{t('contact.success')}</p>
           <button
+            type="button"
             onClick={() => setSubmitted(false)}
-            className="mt-8 px-6 py-3 bg-brand text-white font-medium rounded-full hover:bg-brand-dark transition"
+            className="mt-8 px-6 py-3 bg-brand text-white font-medium rounded-full hover:bg-brand-dark transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
           >
             {t('contact.sendAnother')}
           </button>
@@ -149,7 +154,7 @@ const Contact = () => {
       <h1 className="font-display text-4xl md:text-5xl font-bold text-center text-ink mb-10">{t('contact.title')}</h1>
 
       {submitError && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-red-800">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-red-800" aria-live="polite">
           {t('contact.error')}
         </div>
       )}
@@ -166,6 +171,7 @@ const Contact = () => {
             value={formData.client_name}
             onChange={handleChange}
             placeholder={t('contact.clientNamePlaceholder')}
+            autoComplete="name"
             required
             className={getInputClasses()}
           />
@@ -182,6 +188,8 @@ const Contact = () => {
             value={formData.email}
             onChange={handleChange}
             placeholder={t('contact.emailPlaceholder')}
+            autoComplete="email"
+            spellCheck={false}
             required
             className={getInputClasses()}
           />
@@ -195,6 +203,7 @@ const Contact = () => {
             type="tel"
             id="whatsapp"
             name="whatsapp"
+            ref={whatsappRef}
             value={formData.whatsapp}
             onChange={handleChange}
             placeholder="+51987654321"
@@ -206,7 +215,7 @@ const Contact = () => {
             aria-describedby={fieldErrors.whatsapp ? 'whatsapp-error' : undefined}
           />
           {fieldErrors.whatsapp && (
-            <p id="whatsapp-error" className="mt-2 text-sm text-red-700">{fieldErrors.whatsapp}</p>
+            <p id="whatsapp-error" className="mt-2 text-sm text-red-700" aria-live="polite">{fieldErrors.whatsapp}</p>
           )}
         </div>
 
@@ -217,8 +226,10 @@ const Contact = () => {
           <select
             id="country"
             name="country"
+            ref={countryRef}
             value={formData.country}
             onChange={handleChange}
+            autoComplete="country-name"
             required
             className={getInputClasses(Boolean(fieldErrors.country))}
             aria-invalid={Boolean(fieldErrors.country)}
@@ -234,7 +245,7 @@ const Contact = () => {
             ))}
           </select>
           {fieldErrors.country && (
-            <p id="country-error" className="mt-2 text-sm text-red-700">{fieldErrors.country}</p>
+            <p id="country-error" className="mt-2 text-sm text-red-700" aria-live="polite">{fieldErrors.country}</p>
           )}
         </div>
 
@@ -249,6 +260,7 @@ const Contact = () => {
             value={formData.pet_name}
             onChange={handleChange}
             placeholder={t('contact.petNamePlaceholder')}
+            autoComplete="off"
             className={getInputClasses()}
           />
         </div>
@@ -263,6 +275,7 @@ const Contact = () => {
             value={formData.notes}
             onChange={handleChange}
             placeholder={t('contact.notesPlaceholder')}
+            autoComplete="off"
             rows={4}
             className={getInputClasses()}
           />
@@ -283,7 +296,7 @@ const Contact = () => {
             className="w-full text-sm text-muted file:mr-4 file:rounded-full file:border-0 file:bg-sand file:px-4 file:py-2 file:text-sm file:font-medium file:text-ink hover:file:bg-sand/70 cursor-pointer"
           />
           {fileError && (
-            <p id="pet-image-error" className="mt-2 text-sm text-red-700">{fileError}</p>
+            <p id="pet-image-error" className="mt-2 text-sm text-red-700" aria-live="polite">{fileError}</p>
           )}
           {petImageFile && (
             <p className="mt-2 text-sm text-muted">{petImageFile.name}</p>
@@ -317,9 +330,9 @@ const Contact = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full px-6 py-3 bg-brand text-white font-medium rounded-full hover:bg-brand-dark transition disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full px-6 py-3 bg-brand text-white font-medium rounded-full hover:bg-brand-dark transition disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
         >
-          {isSubmitting ? t('contact.submit') + '...' : t('contact.submit')}
+          {isSubmitting ? t('contact.submit') + '…' : t('contact.submit')}
         </button>
 
       </form>
