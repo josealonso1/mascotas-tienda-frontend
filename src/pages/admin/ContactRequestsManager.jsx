@@ -10,6 +10,7 @@ const ContactRequestsManager = () => {
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('');
 
   const fetchContactRequests = async () => {
     try {
@@ -83,7 +84,8 @@ const ContactRequestsManager = () => {
       normalizeText(request.email || '').includes(q) ||
       normalizeText(request.pet_name || '').includes(q);
     const matchesCountry = selectedCountry === '' || request.country === selectedCountry;
-    return matchesText && matchesCountry;
+    const matchesStatus = selectedStatus === '' || request.status === selectedStatus;
+    return matchesText && matchesCountry && matchesStatus;
   });
 
   return (
@@ -110,11 +112,25 @@ const ContactRequestsManager = () => {
             </option>
           ))}
         </select>
-        {(searchTerm !== '' || selectedCountry !== '') && (
+        <select
+          value={selectedStatus}
+          onChange={(e) => setSelectedStatus(e.target.value)}
+          aria-label="Filtrar por estado"
+          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        >
+          <option value="">Todos los estados</option>
+          <option value="pending">Pendiente</option>
+          <option value="contacted">Contactado</option>
+          <option value="in_progress">En progreso</option>
+          <option value="shipped">Enviado</option>
+          <option value="delivered">Entregado</option>
+        </select>
+        {(searchTerm !== '' || selectedCountry !== '' || selectedStatus !== '') && (
           <button
             onClick={() => {
               setSearchTerm('');
               setSelectedCountry('');
+              setSelectedStatus('');
             }}
             className="px-4 py-2 bg-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-400 transition"
           >

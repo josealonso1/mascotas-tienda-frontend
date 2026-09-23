@@ -17,6 +17,7 @@ const ArtworksManager = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    visible: true,
   });
   const [artworkImageFile, setArtworkImageFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -44,11 +45,13 @@ const ArtworksManager = () => {
       setFormData({
         title: editingArtwork.title,
         description: editingArtwork.description || '',
+        visible: editingArtwork.visible !== false,
       });
     } else {
       setFormData({
         title: '',
         description: '',
+        visible: true,
       });
     }
   }, [editingArtwork]);
@@ -56,6 +59,11 @@ const ArtworksManager = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: checked }));
   };
 
   const handleFileChange = async (e) => {
@@ -103,11 +111,13 @@ const ArtworksManager = () => {
           title: formData.title,
           description: formData.description,
           image_url: imageUrl,
+          visible: formData.visible,
         });
       } else {
         const updateData = {
           title: formData.title,
           description: formData.description,
+          visible: formData.visible,
         };
         if (imageUrl) {
           updateData.image_url = imageUrl;
@@ -115,7 +125,7 @@ const ArtworksManager = () => {
         await updateArtwork(editingArtwork.id, updateData);
       }
 
-      setFormData({ title: '', description: '' });
+      setFormData({ title: '', description: '', visible: true });
       setArtworkImageFile(null);
       setFileError('');
       setEditingArtwork(null);
@@ -143,9 +153,18 @@ const ArtworksManager = () => {
     }
   };
 
+  const handleVisibilityChange = async (artwork) => {
+    try {
+      await updateArtwork(artwork.id, { visible: artwork.visible === false });
+      fetchArtworks();
+    } catch (err) {
+      alert('Error al cambiar la visibilidad del artwork');
+    }
+  };
+
   const handleCancelEdit = () => {
     setEditingArtwork(null);
-    setFormData({ title: '', description: '' });
+    setFormData({ title: '', description: '', visible: true });
     setArtworkImageFile(null);
     setFileError('');
     setSubmitError(null);
@@ -188,6 +207,20 @@ const ArtworksManager = () => {
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
+          </div>
+
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="visible"
+              name="visible"
+              checked={formData.visible}
+              onChange={handleCheckboxChange}
+              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <label htmlFor="visible" className="ml-2 text-sm">
+              Visible en el sitio público
+            </label>
           </div>
 
           <div>
@@ -285,6 +318,9 @@ const ArtworksManager = () => {
                   Descripción
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Visible
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Acciones
                 </th>
               </tr>
@@ -306,6 +342,15 @@ const ArtworksManager = () => {
                     <div className="text-sm text-gray-500 truncate max-w-xs">
                       {artwork.description || '-'}
                     </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <input
+                      type="checkbox"
+                      checked={artwork.visible !== false}
+                      onChange={() => handleVisibilityChange(artwork)}
+                      aria-label={`Mostrar ${artwork.title} en el sitio público`}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button

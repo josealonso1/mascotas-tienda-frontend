@@ -129,6 +129,15 @@ const TestimonialsManager = () => {
     }
   };
 
+  const handleVisibilityChange = async (testimonial) => {
+    try {
+      await updateTestimonial(testimonial.id, { visible: !testimonial.visible });
+      fetchTestimonials();
+    } catch (err) {
+      alert('Error al cambiar la visibilidad del testimonio');
+    }
+  };
+
   const handleCancelEdit = () => {
     setEditingTestimonial(null);
     setFormData({
@@ -316,13 +325,13 @@ const TestimonialsManager = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-xs font-medium rounded ${
-                      testimonial.visible
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-gray-100 text-gray-800'
-                    }`}>
-                      {testimonial.visible ? 'Sí' : 'No'}
-                    </span>
+                    <input
+                      type="checkbox"
+                      checked={testimonial.visible}
+                      onChange={() => handleVisibilityChange(testimonial)}
+                      aria-label={`Mostrar el testimonio de ${testimonial.client_name} en el sitio público`}
+                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button
