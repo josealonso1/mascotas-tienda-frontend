@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { getArtworks } from '../../api/artworks';
@@ -44,15 +44,14 @@ const HighlightsCarousel = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [reloadCount, setReloadCount] = useState(0);
-  const carouselRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isCarouselPaused, setIsCarouselPaused] = useState(false);
+  const [isPointerInsideCarousel, setIsPointerInsideCarousel] = useState(false);
 
-  const scrollCarousel = (direction) => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    carouselRef.current?.scrollBy({
-      left: direction * 360,
-      behavior: prefersReducedMotion ? 'auto' : 'smooth',
-    });
+  const showArtwork = (direction) => {
+    setActiveIndex((currentIndex) => (
+      (currentIndex + direction + artworks.length) % artworks.length
+    ));
   };
 
   useEffect(() => {
@@ -74,6 +73,20 @@ const HighlightsCarousel = () => {
     fetchArtworks();
   }, [reloadCount]);
 
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (artworks.length < 2 || isCarouselPaused || isPointerInsideCarousel || prefersReducedMotion) {
+      return undefined;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setActiveIndex((currentIndex) => (currentIndex + 1) % artworks.length);
+    }, 2000);
+
+    return () => window.clearInterval(intervalId);
+  }, [artworks.length, isCarouselPaused, isPointerInsideCarousel]);
+
   if (loading) {
     return <p className="text-center py-10" aria-live="polite">{t('home.loading')}</p>;
   }
@@ -92,6 +105,10 @@ const HighlightsCarousel = () => {
 
   if (artworks.length === 0) return null;
 
+  const activeArtwork = artworks[activeIndex];
+  const previousArtwork = artworks[(activeIndex - 1 + artworks.length) % artworks.length];
+  const nextArtwork = artworks[(activeIndex + 1) % artworks.length];
+
   return (
     <section className="bg-cream py-16">
       <div className="mx-auto mb-10 flex max-w-6xl items-center justify-between gap-4 px-4">
@@ -99,7 +116,7 @@ const HighlightsCarousel = () => {
         <div className="flex shrink-0 gap-3">
           <button
             type="button"
-            onClick={() => scrollCarousel(-1)}
+            onClick={() => showArtwork(-1)}
             aria-label={t('home.previousWorks')}
             className="flex h-11 w-11 items-center justify-center rounded-full border border-ink/20 text-xl text-ink hover:border-brand hover:text-brand transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           >
@@ -107,34 +124,60 @@ const HighlightsCarousel = () => {
           </button>
           <button
             type="button"
-            onClick={() => scrollCarousel(1)}
+            onClick={() => showArtwork(1)}
             aria-label={t('home.nextWorks')}
             className="flex h-11 w-11 items-center justify-center rounded-full border border-ink/20 text-xl text-ink hover:border-brand hover:text-brand transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           >
             <span aria-hidden="true">→</span>
           </button>
+          <button
+            type="button"
+            onClick={() => setIsCarouselPaused((isPaused) => !isPaused)}
+            aria-pressed={isCarouselPaused}
+            aria-label={isCarouselPaused ? t('home.resumeCarousel') : t('home.pauseCarousel')}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-ink/20 text-lg text-ink hover:border-brand hover:text-brand transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          >
+            <span aria-hidden="true">{isCarouselPaused ? '▶' : 'Ⅱ'}</span>
+          </button>
         </div>
       </div>
       <div
-        ref={carouselRef}
         role="region"
         aria-label={t('home.worksCarousel')}
-        tabIndex="0"
-        className="flex snap-x snap-mandatory gap-6 overflow-x-auto px-4 pb-4 scroll-smooth focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+        aria-live={isCarouselPaused ? 'polite' : 'off'}
+        onMouseEnter={() => setIsPointerInsideCarousel(true)}
+        onMouseLeave={() => setIsPointerInsideCarousel(false)}
+        className="mx-auto grid max-w-6xl grid-cols-[2.25rem_minmax(0,1fr)_2.25rem] items-center gap-2 overflow-hidden px-3 sm:grid-cols-[minmax(0,1fr)_minmax(20rem,34rem)_minmax(0,1fr)] sm:gap-6 sm:px-4"
       >
-        {artworks.map((artwork) => (
-          <div key={artwork.id} className="w-[min(86vw,26rem)] shrink-0 snap-start">
-              <img
-                src={artwork.image_url}
-                alt={artwork.title}
-                width="320"
-                height="256"
-                loading="lazy"
-                className="h-74 w-full rounded-2xl object-cover shadow-sm"
-              />
-              <p className="mt-3 text-center font-medium text-ink">{artwork.title}</p>
-          </div>
-        ))}
+        <button
+          type="button"
+          onClick={() => showArtwork(-1)}
+          aria-label={`${t('home.previousWorks')}: ${previousArtwork.title}`}
+          className="overflow-hidden rounded-2xl opacity-60 transition hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+        >
+          <img src={previousArtwork.image_url} alt="" width="320" height="400" loading="lazy" className="h-48 w-full object-cover sm:h-80" />
+        </button>
+
+        <div className="min-w-0">
+          <img
+            src={activeArtwork.image_url}
+            alt={activeArtwork.title}
+            width="640"
+            height="800"
+            className="h-[19.8rem] w-full rounded-2xl object-cover shadow-lg transition duration-300 sm:h-[33rem]"
+          />
+          <p className="mt-4 text-center font-display text-xl font-medium text-ink">{activeArtwork.title}</p>
+          <p className="sr-only">{t('home.activeWork', { current: activeIndex + 1, total: artworks.length })}</p>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => showArtwork(1)}
+          aria-label={`${t('home.nextWorks')}: ${nextArtwork.title}`}
+          className="overflow-hidden rounded-2xl opacity-60 transition hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+        >
+          <img src={nextArtwork.image_url} alt="" width="320" height="400" loading="lazy" className="h-48 w-full object-cover sm:h-80" />
+        </button>
       </div>
     </section>
   );
